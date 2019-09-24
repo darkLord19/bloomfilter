@@ -1,15 +1,18 @@
 package bloomfilter
 
 import (
+	"hash"
+	"hash/fnv"
 	"math"
 )
 
 // BloomFilter data struct
 type BloomFilter struct {
 	Size                               byte
-	HashFunctions                      byte
-	AcceptableFalsePositiveProbability float64
 	BitArray                           []byte
+	NumberOfHashFunctions              byte
+	HashFunction                       hash.Hash64
+	AcceptableFalsePositiveProbability float64
 }
 
 func getSizeOfBitArray(elements uint64, prob float64) byte {
@@ -26,5 +29,5 @@ func NewBloomFilter(elements uint64, acceptableFalsePositiveProbability float64)
 	size := getSizeOfBitArray(elements, acceptableFalsePositiveProbability)
 	hashFuncs := getOptimumNumOfHashFuncs(size, elements)
 
-	return BloomFilter{size, hashFuncs, acceptableFalsePositiveProbability, make([]byte, size)}
+	return BloomFilter{size, make([]byte, size), hashFuncs, fnv.New64(), acceptableFalsePositiveProbability}
 }
