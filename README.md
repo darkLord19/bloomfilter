@@ -9,7 +9,7 @@ In this implementation, the hashing functions used is fnv hash, a non-cryptograp
 go get -u github.com/darklord19/bloomfilter
 ```
 
-# How to use
+# Usage
 ```go
 // NewBloomFilter accepts two arguments. First is number of elements you want to track
 // and second is acceptable false positive probability
