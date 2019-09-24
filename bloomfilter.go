@@ -16,3 +16,7 @@ func getSizeOfBitArray(elements uint64, prob float64) byte {
 	return byte(math.Round(
 		-1 * float64(elements) * math.Log(prob) / math.Pow((math.Log(2)), 2)))
 }
+
+func getOptimumNumOfHashFuncs(sizeOfArray byte, elements uint64) byte {
+	return byte((float64(sizeOfArray) / float64(elements)) * math.Log(2))
+}
