@@ -9,20 +9,20 @@ import (
 
 // BloomFilter data struct
 type BloomFilter struct {
-	Size                               byte
+	Size                               uint64
 	BitArray                           []bool
-	NumberOfHashFunctions              byte
+	NumberOfHashFunctions              uint8
 	HashFunction                       hash.Hash64
 	AcceptableFalsePositiveProbability float64
 }
 
-func getSizeOfBitArray(elements uint64, prob float64) byte {
-	return byte(math.Round(
+func getSizeOfBitArray(elements uint64, prob float64) uint64 {
+	return uint64(math.Round(
 		-1 * float64(elements) * math.Log(prob) / math.Pow((math.Log(2)), 2)))
 }
 
-func getOptimumNumOfHashFuncs(sizeOfArray byte, elements uint64) byte {
-	return byte((float64(sizeOfArray) / float64(elements)) * math.Log(2))
+func getOptimumNumOfHashFuncs(sizeOfArray uint64, elements uint64) uint8 {
+	return uint8(float64(sizeOfArray) / float64(elements) * math.Log(2))
 }
 
 func (b *BloomFilter) getHash(seed int, key string) (uint64, error) {
