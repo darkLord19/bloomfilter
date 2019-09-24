@@ -40,3 +40,16 @@ func NewBloomFilter(elements uint64, acceptableFalsePositiveProbability float64)
 
 	return BloomFilter{size, make([]byte, size), hashFuncs, fnv.New64(), acceptableFalsePositiveProbability}
 }
+
+// Add adds new element in bloomfilter instance
+func (b *BloomFilter) Add(element string) error {
+	for i := 0; i < int(b.NumberOfHashFunctions); i++ {
+		t, err := b.getHash(i, element)
+		if err != nil {
+			return err
+		}
+		position := t % uint64(b.Size)
+		b.BitArray[position] = 1
+	}
+	return nil
+}
