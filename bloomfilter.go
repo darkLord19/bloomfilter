@@ -4,6 +4,7 @@ import (
 	"hash"
 	"hash/fnv"
 	"math"
+	"strconv"
 )
 
 // BloomFilter data struct
@@ -22,6 +23,14 @@ func getSizeOfBitArray(elements uint64, prob float64) byte {
 
 func getOptimumNumOfHashFuncs(sizeOfArray byte, elements uint64) byte {
 	return byte((float64(sizeOfArray) / float64(elements)) * math.Log(2))
+}
+
+func (b *BloomFilter) getHash(seed int, key string) (uint64, error) {
+	t := []byte(strconv.Itoa(seed))
+	var err error
+	_, err = b.HashFunction.Write(t)
+	_, err = b.HashFunction.Write([]byte(key))
+	return b.HashFunction.Sum64(), err
 }
 
 // NewBloomFilter returns newly created BloomFilter struct
