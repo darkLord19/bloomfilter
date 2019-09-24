@@ -1,3 +1,25 @@
+/*
+Package bloomfilter implements bloomfilter data structure.
+
+A Bloom filter is a data structure designed to tell you, rapidly
+and memory-efficiently, whether an element is present in a set.
+The price paid for this efficiency is that a Bloom filter is a probabilistic data structure:
+it tells us that the element either definitely is not in the set or may be in the set.
+
+Example:
+
+	package main
+
+	import "github.com/darkLord19/bloomfilter"
+
+	func main() {
+		bf := bloomfilter.NewBloomFilter(10000, 0.10)
+		bf.Add("A")
+		bf.Add("B")
+		status, err := bf.DoesNotExist("C")
+	}
+
+*/
 package bloomfilter
 
 import (
