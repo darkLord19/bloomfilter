@@ -53,3 +53,18 @@ func (b *BloomFilter) Add(element string) error {
 	}
 	return nil
 }
+
+// DoesNotExist checks if element does not exist for sure in our dataset
+func (b *BloomFilter) DoesNotExist(element string) (bool, error) {
+	for i := 0; i < int(b.NumberOfHashFunctions); i++ {
+		t, err := b.getHash(i, element)
+		if err != nil {
+			return false, err
+		}
+		position := t % uint64(b.Size)
+		if b.BitArray[position] != 1 {
+			return true, nil
+		}
+	}
+	return false, nil
+}
