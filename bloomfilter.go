@@ -62,7 +62,7 @@ func (b *BloomFilter) DoesNotExist(element string) (bool, error) {
 			return false, err
 		}
 		position := t % uint64(b.Size)
-		if b.BitArray[position] {
+		if !b.BitArray[position] {
 			return true, nil
 		}
 	}
