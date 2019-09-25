@@ -22,4 +22,5 @@ bf := bloomfilter.NewBloomFilter(10000, 0.10)
 bf.Add("A")
 bf.Add("B")
 res, err := bf.DoesNotExist("C")
+elems := bf.GetElementsEstimate()
 ```

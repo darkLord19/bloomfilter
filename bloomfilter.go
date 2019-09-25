@@ -17,6 +17,7 @@ Example:
 		bf.Add("A")
 		bf.Add("B")
 		status, err := bf.DoesNotExist("C")
+		elems := bf.GetElementsEstimate()
 	}
 
 */
