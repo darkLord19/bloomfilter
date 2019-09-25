@@ -9,6 +9,11 @@ In this implementation, the hashing functions used is fnv hash, a non-cryptograp
 go get -u github.com/darklord19/bloomfilter
 ```
 
+# Import
+```go
+import "github.com/darkLord19/bloomfilter
+```
+
 # Usage
 ```go
 // NewBloomFilter accepts two arguments. First is number of elements you want to track
