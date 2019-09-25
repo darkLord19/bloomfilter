@@ -48,6 +48,7 @@ func getOptimumNumOfHashFuncs(sizeOfArray uint64, elements uint64) uint8 {
 }
 
 func (b *BloomFilter) getHash(seed int, key string) (uint64, error) {
+	b.HashFunction.Reset()
 	t := []byte(strconv.Itoa(seed))
 	var err error
 	_, err = b.HashFunction.Write(t)
