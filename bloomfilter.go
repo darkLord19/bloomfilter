@@ -36,6 +36,7 @@ type BloomFilter struct {
 	NumberOfHashFunctions              uint8
 	HashFunction                       hash.Hash64
 	AcceptableFalsePositiveProbability float64
+	numberOfSetBits                    uint64
 }
 
 func getSizeOfBitArray(elements uint64, prob float64) uint64 {
@@ -63,7 +64,7 @@ func NewBloomFilter(elements uint64, acceptableFalsePositiveProbability float64)
 	size := getSizeOfBitArray(elements, acceptableFalsePositiveProbability)
 	hashFuncs := getOptimumNumOfHashFuncs(size, elements)
 
-	return BloomFilter{size, make([]bool, size), hashFuncs, fnv.New64(), acceptableFalsePositiveProbability}
+	return BloomFilter{size, make([]bool, size), hashFuncs, fnv.New64(), acceptableFalsePositiveProbability, 0}
 }
 
 // Add adds new element in bloomfilter instance
@@ -75,6 +76,7 @@ func (b *BloomFilter) Add(element string) error {
 		}
 		position := t % uint64(b.Size)
 		b.BitArray[position] = true
+		b.numberOfSetBits++
 	}
 	return nil
 }
