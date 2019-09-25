@@ -92,3 +92,15 @@ func (b *BloomFilter) DoesNotExist(element string) (bool, error) {
 	}
 	return false, nil
 }
+
+// GetElementsEstimate gives approximate number of items in bloom filter
+func (b *BloomFilter) GetElementsEstimate() uint64 {
+	setBits := uint64(0)
+	for i := uint64(0); i < b.Size; i++ {
+		if b.BitArray[i] {
+			setBits++
+		}
+	}
+	return uint64(math.Round(
+		-1 * (float64(b.Size) / float64(b.NumberOfHashFunctions)) * math.Log((1 - float64(setBits)/float64(b.Size)))))
+}
