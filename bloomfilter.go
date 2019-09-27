@@ -32,7 +32,7 @@ import (
 
 // BloomFilter data struct
 type BloomFilter struct {
-	Size                               uint64
+	Size                               uint32
 	BitArray                           []bool
 	NumberOfHashFunctions              uint8
 	HashFunction                       hash.Hash64
@@ -40,12 +40,12 @@ type BloomFilter struct {
 	numberOfSetBits                    uint64
 }
 
-func getSizeOfBitArray(elements uint64, prob float64) uint64 {
-	return uint64(math.Round(
+func getSizeOfBitArray(elements uint32, prob float64) uint32 {
+	return uint32(math.Round(
 		-1 * float64(elements) * math.Log(prob) / math.Pow((math.Log(2)), 2)))
 }
 
-func getOptimumNumOfHashFuncs(sizeOfArray uint64, elements uint64) uint8 {
+func getOptimumNumOfHashFuncs(sizeOfArray uint32, elements uint32) uint8 {
 	return uint8(float64(sizeOfArray) / float64(elements) * math.Log(2))
 }
 
@@ -61,7 +61,7 @@ func (b *BloomFilter) getHash(seed int, key string) (uint64, error) {
 // NewBloomFilter returns newly created BloomFilter struct. It accepts two arguments.
 // 1st is number of elements you want to track
 // 2nd second is acceptable false positive probability
-func NewBloomFilter(elements uint64, acceptableFalsePositiveProbability float64) BloomFilter {
+func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64) BloomFilter {
 	size := getSizeOfBitArray(elements, acceptableFalsePositiveProbability)
 	hashFuncs := getOptimumNumOfHashFuncs(size, elements)
 
@@ -98,7 +98,7 @@ func (b *BloomFilter) DoesNotExist(element string) (bool, error) {
 }
 
 // GetElementsEstimate gives approximate number of items in bloom filter
-func (b *BloomFilter) GetElementsEstimate() uint64 {
-	return uint64(math.Round(
+func (b *BloomFilter) GetElementsEstimate() uint32 {
+	return uint32(math.Round(
 		-1 * (float64(b.Size) / float64(b.NumberOfHashFunctions)) * math.Log((1 - float64(b.numberOfSetBits)/float64(b.Size)))))
 }
