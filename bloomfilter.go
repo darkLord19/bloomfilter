@@ -49,12 +49,12 @@ func getOptimumNumOfHashFuncs(sizeOfArray uint32, elements uint32) uint8 {
 	return uint8(float64(sizeOfArray) / float64(elements) * math.Log(2))
 }
 
-func (b *BloomFilter) getHash(seed int, key string) (uint64, error) {
+func (b *BloomFilter) getHash(seed int, key []byte) (uint64, error) {
 	b.HashFunction.Reset()
 	t := []byte(strconv.Itoa(seed))
 	var err error
 	_, err = b.HashFunction.Write(t)
-	_, err = b.HashFunction.Write([]byte(key))
+	_, err = b.HashFunction.Write(key)
 	return b.HashFunction.Sum64(), err
 }
 
@@ -69,7 +69,7 @@ func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64)
 }
 
 // Add adds new element in bloomfilter instance
-func (b *BloomFilter) Add(element string) error {
+func (b *BloomFilter) Add(element []byte) error {
 	for i := 0; i < int(b.NumberOfHashFunctions); i++ {
 		t, err := b.getHash(i, element)
 		if err != nil {
@@ -83,7 +83,7 @@ func (b *BloomFilter) Add(element string) error {
 }
 
 // DoesNotExist checks if element does not exist for sure in our dataset
-func (b *BloomFilter) DoesNotExist(element string) (bool, error) {
+func (b *BloomFilter) DoesNotExist(element []byte) (bool, error) {
 	for i := 0; i < int(b.NumberOfHashFunctions); i++ {
 		t, err := b.getHash(i, element)
 		if err != nil {
