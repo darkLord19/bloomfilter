@@ -58,9 +58,9 @@ func (b *BloomFilter) getHash(seed int, key []byte) (uint64, error) {
 	return b.HashFunction.Sum64(), err
 }
 
-// NewBloomFilter returns newly created BloomFilter struct. It accepts two arguments.
+// NewBloomFilter returns pointer to newly created BloomFilter struct. It accepts two arguments.
 // 1st is number of elements you want to track
-// 2nd second is acceptable false positive probability
+// 2nd is acceptable false positive probability
 func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64) *BloomFilter {
 	size := getSizeOfBitArray(elements, acceptableFalsePositiveProbability)
 	hashFuncs := getOptimumNumOfHashFuncs(size, elements)
@@ -68,7 +68,7 @@ func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64)
 	return &BloomFilter{size, make([]bool, size), hashFuncs, fnv.New64(), acceptableFalsePositiveProbability, 0}
 }
 
-// Add adds new element in bloomfilter instance
+// Add inserts new element in bloomfilter instance
 func (b *BloomFilter) Add(element []byte) error {
 	for i := 0; i < int(b.NumberOfHashFunctions); i++ {
 		t, err := b.getHash(i, element)
