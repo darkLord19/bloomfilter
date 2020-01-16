@@ -19,8 +19,8 @@ import "github.com/darkLord19/bloomfilter
 // NewBloomFilter accepts two arguments. First is number of elements you want to track
 // and second is acceptable false positive probability
 bf := bloomfilter.NewBloomFilter(10000, 0.10) 
-bf.Add("A")
-bf.Add("B")
-res, err := bf.DoesNotExist("C")
+bf.Add([]byte("A"))
+bf.Add([]byte("B"))
+res, err := bf.DoesNotExist([]byte("C"))
 elems := bf.GetElementsEstimate()
 ```
