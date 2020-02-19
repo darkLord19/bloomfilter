@@ -18,9 +18,9 @@ Example:
 
 	func main() {
 		bf := bloomfilter.NewBloomFilter(10000, 0.10, fnv.New64())
-		bf.Add("A")
-		bf.Add("B")
-		status, err := bf.DoesNotExist("C")
+		bf.Add([]byte("A"))
+		bf.Add([]byte("B"))
+		status, err := bf.DoesNotExist([]byte("C"))
 		elems := bf.GetElementsEstimate()
 	}
 
