@@ -13,14 +13,14 @@ go get -u github.com/darklord19/bloomfilter
 
 # Import
 ```go
-import "github.com/darkLord19/bloomfilter
+import "github.com/darkLord19/bloomfilter"
 ```
 
 # Usage
 ```go
-// NewBloomFilter accepts two arguments. First is number of elements you want to track
-// and second is acceptable false positive probability
-bf := bloomfilter.NewBloomFilter(10000, 0.10) 
+// NewBloomFilter accepts three arguments. First is number of elements you want to track,
+// second is acceptable false positive probability, and third is hash you want to use(it must implement hash64 interface)
+bf := bloomfilter.NewBloomFilter(10000, 0.10, fnv.New64()) 
 bf.Add([]byte("A"))
 bf.Add([]byte("B"))
 res, err := bf.DoesNotExist([]byte("C"))
