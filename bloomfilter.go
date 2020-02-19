@@ -10,10 +10,14 @@ Example:
 
 	package main
 
-	import "github.com/darkLord19/bloomfilter"
+	import (
+		"hash/fnv"
+
+		"github.com/darkLord19/bloomfilter"
+	)
 
 	func main() {
-		bf := bloomfilter.NewBloomFilter(10000, 0.10)
+		bf := bloomfilter.NewBloomFilter(10000, 0.10, fnv.New64())
 		bf.Add("A")
 		bf.Add("B")
 		status, err := bf.DoesNotExist("C")
@@ -25,7 +29,6 @@ package bloomfilter
 
 import (
 	"hash"
-	"hash/fnv"
 	"math"
 	"strconv"
 )
@@ -61,11 +64,12 @@ func (b *BloomFilter) getHash(seed int, key []byte) (uint64, error) {
 // NewBloomFilter returns pointer to newly created BloomFilter struct. It accepts two arguments.
 // 1st is number of elements you want to track
 // 2nd is acceptable false positive probability
-func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64) *BloomFilter {
+// 3rd is the hash function you want to use
+func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64, hash hash.Hash64) *BloomFilter {
 	size := getSizeOfBitArray(elements, acceptableFalsePositiveProbability)
 	hashFuncs := getOptimumNumOfHashFuncs(size, elements)
 
-	return &BloomFilter{size, make([]bool, size), hashFuncs, fnv.New64(), acceptableFalsePositiveProbability, 0}
+	return &BloomFilter{size, make([]bool, size), hashFuncs, hash, acceptableFalsePositiveProbability, 0}
 }
 
 // Add inserts new element in bloomfilter instance
