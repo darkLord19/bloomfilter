@@ -17,11 +17,11 @@ Example:
 	)
 
 	func main() {
-		bf := bloomfilter.NewBloomFilter(10000, 0.10, fnv.New64())
+		bf := bloomfilter.New(10000, 0.10, fnv.New64())
 		bf.Add([]byte("A"))
 		bf.Add([]byte("B"))
 		status, err := bf.DoesNotExist([]byte("C"))
-		elems := bf.GetElementsEstimate()
+		elems := bf.ElementsEstimate()
 	}
 
 */
@@ -61,11 +61,12 @@ func (b *BloomFilter) getHash(seed int, key []byte) (uint64, error) {
 	return b.HashFunction.Sum64(), err
 }
 
-// NewBloomFilter returns pointer to newly created BloomFilter struct. It accepts two arguments.
+// New returns pointer to newly created BloomFilter struct.
+// It accepts three arguments.
 // 1st is number of elements you want to track
 // 2nd is acceptable false positive probability
 // 3rd is the hash function you want to use
-func NewBloomFilter(elements uint32, acceptableFalsePositiveProbability float64, hash hash.Hash64) *BloomFilter {
+func New(elements uint32, acceptableFalsePositiveProbability float64, hash hash.Hash64) *BloomFilter {
 	size := getSizeOfBitArray(elements, acceptableFalsePositiveProbability)
 	hashFuncs := getOptimumNumOfHashFuncs(size, elements)
 
@@ -102,7 +103,7 @@ func (b *BloomFilter) DoesNotExist(element []byte) (bool, error) {
 }
 
 // GetElementsEstimate gives approximate number of items in bloom filter
-func (b *BloomFilter) GetElementsEstimate() uint32 {
+func (b *BloomFilter) ElementsEstimate() uint32 {
 	return uint32(math.Round(
 		-1 * (float64(b.Size) / float64(b.NumberOfHashFunctions)) * math.Log((1 - float64(b.numberOfSetBits)/float64(b.Size)))))
 }
