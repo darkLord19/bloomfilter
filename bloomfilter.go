@@ -102,7 +102,7 @@ func (b *BloomFilter) DoesNotExist(element []byte) (bool, error) {
 	return false, nil
 }
 
-// GetElementsEstimate gives approximate number of items in bloom filter
+// ElementsEstimate gives approximate number of items in bloom filter
 func (b *BloomFilter) ElementsEstimate() uint32 {
 	return uint32(math.Round(
 		-1 * (float64(b.Size) / float64(b.NumberOfHashFunctions)) * math.Log((1 - float64(b.numberOfSetBits)/float64(b.Size)))))
